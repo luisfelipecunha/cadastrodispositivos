@@ -79,7 +79,7 @@ void cadastrar(device *ponteiro, int n) {
 			scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
 			printf("Digite o codigo de cadastro do produto \n");
 			scanf("%d", &ponteiro->registro);
-			fwrite(&ponteiro, sizeof(device), n, fp); //grava os valores digitados em blocos no arquivo
+			fwrite(&ponteiro, sizeof(device), 1, fp); //grava os valores digitados em blocos no arquivo
 
 			ponteiro++; //incrementa o ponteiro para a proxima posicao de memoria
 
