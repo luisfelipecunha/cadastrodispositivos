@@ -19,7 +19,7 @@ struct data
 
 
 //struct para o cadastro do ponteiro
-typedef struct  device
+typedef struct
 	{
 		char tipo[30];
 		int numero;
@@ -28,20 +28,20 @@ typedef struct  device
 		struct data entrada;
 		int registro;
 	
-	} dispositivo;
+	} device;
 
-struct dispositivo *ponteiro;
+device *ponteiro;
 
 
 // funcoes
 void abertura();
-void menu (*ponteiro);
+void menu (device *ponteiro);
 void cadastrar (device *ponteiro, int n);
 void listar (device *ponteiro, int n);
 void apagar_todos ();
-void pesquisar (device *ponteiro, n);
-void editar_registro (device *ponteiro, n);
-
+void pesquisar (device *ponteiro,int n);
+void editar_registro (device *ponteiro,int n);
+void apagar_registro(device *ponteiro, int n);
 
 
 //ponteiro para arquivo de forma global, pois é util ao longo do programa
@@ -58,14 +58,14 @@ void abertura() {
 }
 
 //cadastra o produto e salva no arquivo
-void cadastrar(struct ponteiro, int n) {
+void cadastrar(device *ponteiro, int n) {
 	fp = fopen(CADASTRO, "a+");
 	int i;
 	if(fp==0) {
 		printf("Erro na abertura do arquivo \n");
 		exit(1);
 	} else {
-		ponteiro = (struct dispositivo *)malloc(n * sizeof(struct dispositivo)); //aloca o tamanho do ponteiro da struct
+		ponteiro = (device *)malloc(n * sizeof(device)); //aloca o tamanho do ponteiro da struct
 		for(i=0;i<n;i++) {
 			printf("Digite o tipo do produto \n");
 			scanf("%s", ponteiro->tipo);
@@ -74,12 +74,12 @@ void cadastrar(struct ponteiro, int n) {
 			printf("Digite o tamanho da tela em polegadas \n");
 			scanf("%f", &ponteiro->t_tela);
 			printf("Digite o valor pago em R$ \n");
-			scanf("%.2f", &ponteiro->valor_pago);
+			scanf("%f", &ponteiro->valor_pago);
 			printf("Digite o dia mes e ano de entrada separados por espaco ex:'22 10 1998' \n");
 			scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
 			printf("Digite o codigo de cadastro do produto \n");
-			scanf("%d", &codigo->registro);
-			fwrite(&ponteiro, sizeof(struct dispositivo), n, fp); //grava os valores digitados em blocos no arquivo
+			scanf("%d", &ponteiro->registro);
+			fwrite(&ponteiro, sizeof(device), n, fp); //grava os valores digitados em blocos no arquivo
 
 			ponteiro++; //incrementa o ponteiro para a proxima posicao de memoria
 
@@ -90,7 +90,7 @@ void cadastrar(struct ponteiro, int n) {
 	fclose(fp); //fecha o ponteiro para o arquivo
 }
 
-void listar(struct ponteiro, int n) {
+void listar(device *ponteiro, int n) {
 	int i;
 	fp = fopen(CADASTRO, "r");
 	if(fp==0) {
@@ -99,7 +99,7 @@ void listar(struct ponteiro, int n) {
 
 	} else {
 		for(i=0;feof(fp)== 0;i++) {
-			fread(&ponteiro, sizeof(struct dispositivo), 1, fp); //lendo o arquivo por blocos
+			fread(&ponteiro, sizeof(device), 1, fp); //lendo o arquivo por blocos
 			printf("Tipo: %s \n", ponteiro->tipo);
 			printf("S/N: %d \n", ponteiro->numero);
 			printf("Tamanho da Tela: %1.f \n", ponteiro->t_tela);
@@ -131,9 +131,9 @@ void apagar_todos() {
 			printf("Não foi possível apagar o arquivo \n");
 		}
 	}
-}struct
+}
 
-void pesquisar(struct ponteiro, n) {
+void pesquisar(device *ponteiro,int n) {
 	int codigo;
 	do {
 		printf("Digite o codigo do ponteiro que deseja pesquisar ou '0' para sair da pesquisa \n");
@@ -147,7 +147,7 @@ void pesquisar(struct ponteiro, n) {
 				printf("Erro!! Não é possível abrir o arquivo \n");
 			} else {
 				do {
-					if(fread(&ponteiro, sizeof(struct dispositivo), 1, fp)==0) {
+					if(fread(&ponteiro, sizeof(device), 1, fp)==0) {
 						break;
 					} 
 					if(ponteiro->registro==codigo) { //se o codigo for igual o registrado mostra o ponteiro
@@ -174,11 +174,11 @@ void pesquisar(struct ponteiro, n) {
 	
 }
 
-void editar_registro(struct ponteiro, n) {
+void editar_registro(device *ponteiro,int n) {
 	int codigo;
 	char resposta;
 	int posicao = 0;
-	int sucesso = 0;
+	
 	do {
 		printf("Digite o codigo do ponteiro que deseja alterar ou '0' para sair \n");
 		scanf("%d", &codigo);
@@ -192,62 +192,68 @@ void editar_registro(struct ponteiro, n) {
 
 			} else {
 				do {
-					if(fread(&ponteiro, sizeof(struct dispositivo), 1, fp)==0) {
+					if(fread(&ponteiro, sizeof(device), 1, fp)==0) {
 						break;
 					}
-					if(ponteiro->registro==codigo) { //se o codigo for igual ao registrado mostra o registro a ser alterado
-						printf("<<<<<<<<<<<<<<<Registro antigo>>>>>>>>>>>>>>");
-						printf("Tipo: %s \n", ponteiro->tipo);
-						printf("S/N: %d \n", ponteiro->numero);
-						printf("Tamanho da Tela: %1.f \n", ponteiro->t_tela);
-						printf("Valor Pago: R$%2.f \n", ponteiro->valor_pago);
-						printf("Data de Entrada: %s/%s/%s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
-						printf("Regitro no: %d", ponteiro->registro);
-						printf("Tem certeza que deseja alterar? S/N \n");
-						scanf("%c", &resposta);
-						if(resposta=='S') {
-							printf("Digite o tipo do produto \n");
-							scanf("%s", ponteiro->tipo);
-							printf("Digite o numero de serie do produto \n");
-							scanf("%d", &ponteiro->numero);
-							printf("Digite o tamanho da tela em polegadas \n");
-							scanf("%f", &ponteiro->t_tela);
-							printf("Digite o valor pago em R$ \n");
-							scanf("%.2f", &ponteiro->valor_pago);
-							printf("Digite o dia mes e ano de entrada separados por espaco ex:'22 10 1998' \n");
-							scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
-							printf("Digite o codigo de cadastro do produto \n");
-							scanf("%d", &ponteiro->registro);
-							fseek(fp, posicao, SEEK_SET);
-							sucesso = fwrite(&ponteiro, sizeof(struct dispositivo), n, fp) == sizeof(struct dispositivo);
-							break;
+						if(ponteiro->registro==codigo) { //se o codigo for igual ao registrado mostra o registro a ser alterado
+							printf("<<<<<<<<<<<<<<<Registro antigo>>>>>>>>>>>>>>");
+							printf("Tipo: %s \n", ponteiro->tipo);
+							printf("S/N: %d \n", ponteiro->numero);
+							printf("Tamanho da Tela: %1.f \n", ponteiro->t_tela);
+							printf("Valor Pago: R$%2.f \n", ponteiro->valor_pago);
+							printf("Data de Entrada: %s/%s/%s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
+							printf("Regitro no: %d", ponteiro->registro);
+							printf("Tem certeza que deseja alterar? S/N \n");
+							scanf("%c", &resposta);
+							if(resposta=='S'|| resposta=='s') {
+								printf("Digite o tipo do produto \n");
+								scanf("%s", ponteiro->tipo);
+								printf("Digite o numero de serie do produto \n");
+								scanf("%d", &ponteiro->numero);
+								printf("Digite o tamanho da tela em polegadas \n");
+								scanf("%f", &ponteiro->t_tela);
+								printf("Digite o valor pago em R$ \n");
+								scanf("%f", &ponteiro->valor_pago);
+								printf("Digite o dia mes e ano de entrada separados por espaco ex:'22 10 1998' \n");
+								scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
+								printf("Digite o codigo de cadastro do produto \n");
+								scanf("%d", &ponteiro->registro);
+								fseek(fp, posicao, SEEK_SET);
+								fwrite(&ponteiro, sizeof(device), n, fp);
+								break;
 
-						} else {
-							ponteiro++;
+							} else {
+								ponteiro++;
+							}
+							posicao = posicao + sizeof(device);
+								
+					 
 						}
-						posicao = posicao + sizeof(struct dispositivo);
-
-					} while(1)
-				}
-			}
+				} while(1);
 		}
+	}	
 	} while(1);
+	
 }
 
+void apagar_registro(device *ponteiro, int n) {
+	//imcompleta
 
+
+}
 //funcao mostra menu
-void menu(struct ponteiro)
+void menu(device *ponteiro)
 {
 	int op = 1;
 	int n;
 	// looping do menu que so sai quando o usuario digita '0' que eh atribuida a variavel op
 	do{
 		//opcoes do menu
-		printf("Digite '1'para cadastrar ponteiro \n");
-		printf("Digite '2' para listar ponteiros cadastrados \n");
-		printf("Digite '3' para apagar um ponteiro \n");
-		printf("Digite '4' para pesquisar um ponteiro \n");
-		printf("Digite '5' para editar um ponteiro \n");
+		printf("Digite '1'para cadastrar dispositivos \n");
+		printf("Digite '2' para listar dispositivos cadastrados \n");
+		printf("Digite '3' para apagar um dispositivo \n");
+		printf("Digite '4' para pesquisar um dispositivo \n");
+		printf("Digite '5' para editar um dispositivo \n");
 		printf("Digite '6' para apagar todos \n");
 		printf("Digite '0'(zero) para sair \n");
 		scanf("%d", &op);
@@ -262,7 +268,7 @@ void menu(struct ponteiro)
 				listar(ponteiro, n);
 
 			case '3':
-				apagar_um(ponteiro, n);
+				apagar_registro(ponteiro, n);*/
 
 			case '4':
 				pesquisar(ponteiro, n);
@@ -282,11 +288,10 @@ void menu(struct ponteiro)
 }
 
 
-void main() {
-	
-	
-	
+int main() {
+		
 	abertura();
 	//funcao menu recebe o ponteiro *ponteiro para a struct struct dispositivo
 	menu(ponteiro);
+	return 0;
 }
