@@ -60,30 +60,29 @@ void abertura() {
 //cadastra o produto e salva no arquivo
 void cadastrar(device *ponteiro, int n) {
 	fp = fopen(CADASTRO, "a+");
-	int i;
 	if(fp==0) {
 		printf("Erro na abertura do arquivo \n");
 		exit(1);
 	} else {
 		ponteiro = (device *)malloc(n * sizeof(device)); //aloca o tamanho do ponteiro da struct
-		for(i=0;i<n;i++) {
-			printf("Digite o tipo do produto \n");
-			scanf("%s", ponteiro->tipo);
-			printf("Digite o numero de serie do produto \n");
-			scanf("%d", &ponteiro->numero);
-			printf("Digite o tamanho da tela em polegadas \n");
-			scanf("%f", &ponteiro->t_tela);
-			printf("Digite o valor pago em R$ \n");
-			scanf("%f", &ponteiro->valor_pago);
-			printf("Digite o dia mes e ano de entrada separados por espaco ex:'22 10 1998' \n");
-			scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
-			printf("Digite o codigo de cadastro do produto \n");
-			scanf("%d", &ponteiro->registro);
-			fwrite(&ponteiro, sizeof(device), 1, fp); //grava os valores digitados em blocos no arquivo
+		
+		printf("Digite o tipo do produto \n");
+		scanf("%s", ponteiro->tipo);
+		printf("Digite o numero de serie do produto \n");
+		scanf("%d", &ponteiro->numero);
+		printf("Digite o tamanho da tela em polegadas \n");
+		scanf("%f", &ponteiro->t_tela);
+		printf("Digite o valor pago em R$ \n");
+		scanf("%f", &ponteiro->valor_pago);
+		printf("Digite o dia mes e ano de entrada separados por espaco ex:'22 10 1998' \n");
+		scanf("%s %s %s", ponteiro->entrada.dia, ponteiro->entrada.mes, ponteiro->entrada.ano);
+		printf("Digite o codigo de cadastro do produto \n");
+		scanf("%d", &ponteiro->registro);
+		fwrite(&ponteiro, sizeof(device), 1, fp); //grava os valores digitados em blocos no arquivo
 
-			ponteiro++; //incrementa o ponteiro para a proxima posicao de memoria
+		ponteiro++; //incrementa o ponteiro para a proxima posicao de memoria
 
-		}
+		
 
 
 	}
