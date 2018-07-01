@@ -259,24 +259,24 @@ void menu(device *ponteiro)
 		scanf("%d", &op);
 
 		switch(op) {
-			case '1': 
+			case 1: 
 				n++;
 				cadastrar(ponteiro, n);
 				
 
-			case '2':
+			case 2:
 				listar(ponteiro, n);
 
-			case '3':
+			case 3:
 				apagar_registro(ponteiro, n);
 
-			case '4':
+			case 4:
 				pesquisar(ponteiro, n);
 
-			case '5':
+			case 5:
 				editar_registro(ponteiro, n);
 
-			case '6':
+			case 6:
 				apagar_todos();
 
 			default:
