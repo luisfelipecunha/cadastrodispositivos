@@ -268,7 +268,7 @@ void menu(device *ponteiro)
 				listar(ponteiro, n);
 
 			case '3':
-				apagar_registro(ponteiro, n);*/
+				apagar_registro(ponteiro, n);
 
 			case '4':
 				pesquisar(ponteiro, n);
